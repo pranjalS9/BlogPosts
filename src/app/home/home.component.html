@@ -1,0 +1,40 @@
+<app-manage-posts [toEditPost]="toEditPostObj">
+    (updatedPosts)="onSubmit($event)"
+</app-manage-posts>
+
+<div class="home-container">
+    <h1>Posts</h1>
+    <div class="post" *ngFor="let post of dataService.postsArray; index as i">
+        <div class="post-title-modify">
+            <div class="title">
+                {{post.title}}
+            </div>
+            <div class="modify-posts">
+                <div class="show-details-btn">
+                    <button (click)="onDetails(i)" id="show-details-btn" type="submit">Details</button>
+                </div>
+                <div class="edit-btn">
+                    <button (click)="onEdit(i)" id="edit-btn" type="submit">Edit</button>
+                </div>
+                <div class="delete-btn">
+                    <button (click)="onDelete(i)" id="show-details-btn" type="submit">Delete</button>
+                </div>
+            </div>
+        </div>
+        <div class="details" *ngIf="showToggle == true && selectedPostIndex === i && dataService.detailsObj.body !== '' && dataService.detailsObj.comments.length > 0">
+            <div class="post-body">
+                <h3>Description</h3>
+                <div class="post-body-content">
+                    {{dataService.detailsObj.body}}
+                </div>
+            </div>
+            <br>
+            <h3>Comments</h3>
+            <div class="post-comments" *ngFor="let comment of dataService.detailsObj.comments; index as i" >
+                <div class="comment-by-name"><span>{{comment.name}}</span></div><br>
+                <div class="comment-body">{{comment.body}}</div><br>
+                <div class="comment-by-email">{{comment.email}}</div>
+            </div>
+        </div>
+    </div>
+</div>
