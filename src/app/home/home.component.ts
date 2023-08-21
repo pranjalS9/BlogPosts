@@ -15,12 +15,7 @@ export class HomeComponent {
   constructor(public dataService: DataServiceService){}
 
   // @Output() toEditPost = new EventEmitter<INewPost>();
-  toEditPostObj: IPost = {
-    userId: 0,
-    id: 0,
-    title: '',
-    body: ''
-  };
+
 
   selectedPostIndex: number | null = null;
   showToggle: boolean = false;
@@ -31,7 +26,6 @@ export class HomeComponent {
       for(let i=0; i<data.length; i++){
         this.dataService.postsArray.push(data[i])
       }
-      console.log(this.dataService.postsArray)
     })
   }
 
@@ -54,10 +48,11 @@ export class HomeComponent {
   }
 
   onEdit(index: number){
-    this.toEditPostObj = this.dataService.postsArray[index];
+    this.dataService.toEditPostObj = this.dataService.postsArray[index];
   }
 
   onDelete(index: number){
     this.dataService.postsArray.splice(index, 1);
+    this.showToggle = !this.showToggle
   }
 }

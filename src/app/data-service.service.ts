@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { INewPost } from './models/INewPost';
 import { IComment } from './models/IComment';
 import { IDetails } from './models/IDetails';
+import { IErrorMessages } from './models/IErrorMessages';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,14 @@ export class DataServiceService {
       body: ''
     }]
   }
+
+  toEditPostObj: IPost = {
+    userId: 0,
+    id: 0,
+    title: '',
+    body: ''
+  };
+
   getPosts(): Observable<IPost[]> {
     return this.http.get<IPost[]>(this.postUrl);
   }

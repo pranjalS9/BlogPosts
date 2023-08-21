@@ -25,3 +25,7 @@ label{
     font-weight: bold;
     cursor: pointer;
 }
+.title-error, .body-error{
+    color: red;
+    font-weight: bold;
+}

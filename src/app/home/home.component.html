@@ -1,4 +1,4 @@
-<app-manage-posts [toEditPost]="toEditPostObj">
+<app-manage-posts [toEditPost]="dataService.toEditPostObj">
     (updatedPosts)="onSubmit($event)"
 </app-manage-posts>
 
@@ -25,7 +25,7 @@
             <div class="post-body">
                 <h3>Description</h3>
                 <div class="post-body-content">
-                    {{dataService.detailsObj.body}}
+                    {{post.body}}
                 </div>
             </div>
             <br>

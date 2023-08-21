@@ -8,6 +8,7 @@
 h1{
     text-align: center;
     padding: 1.5rem;
+    width: auto;
 }
 .post{
     margin: 0.5rem;
@@ -34,6 +35,7 @@ button{
     background-color: rgb(255, 255, 255);
     padding: 0.9rem;
     font-size: 1.2rem;
+    width: auto;
 }
 .title, .show-details-btn, .edit-btn, .delete-btn{
     height: auto;

@@ -4,6 +4,7 @@ import { INewPost } from '../models/INewPost';
 import { DataServiceService } from '../data-service.service';
 import { Output, EventEmitter } from '@angular/core';
 import { IPost } from '../models/IPost';
+import { IErrorMessages } from '../models/IErrorMessages';
 
 @Component({
   selector: 'app-manage-posts',
@@ -17,23 +18,47 @@ export class ManagePostsComponent {
   @Output() updatedPosts = new EventEmitter<IPost[]>();
   @Input() toEditPost: IPost = {
     userId: 0, 
-    id: 0, 
+    id: -1, 
     title: '', 
     body: '' 
   };
+  
+  errorMessages: IErrorMessages = {
+    titleError: '',
+    bodyError: ''
+  }
 
   onSubmit(postForm: NgForm){
     if(postForm.valid){
-      let isExistId = false;
-      let toEditPostId = -1;
+      let toEditPostId = this.dataService.toEditPostObj.id;
 
-      for(let index = 0; index < this.dataService.postsArray.length; index++){
-        if(this.dataService.postsArray[index].id == postForm.value.id){
+      let isExistId = false;
+      for(let i=0; i<this.dataService.postsArray.length; i++){
+        if(toEditPostId == this.dataService.postsArray[i].id){
           isExistId = true;
-          toEditPostId = index;
         }
       }
-      if(isExistId == false){
+
+      if(isExistId == true){
+        let newEditedPost: IPost = {
+          userId: this.dataService.toEditPostObj.userId,
+          id: this.dataService.toEditPostObj.id,
+          title: postForm.value.title,
+          body: postForm.value.body
+        }
+        this.dataService.detailsObj.body = newEditedPost.body
+        
+        this.dataService.postsArray.splice(toEditPostId-1, 1, newEditedPost)
+
+        this.dataService.toEditPostObj = {
+          userId: 0,
+          id: -1,
+          title: '',
+          body: ''
+        }
+        isExistId = false;
+        postForm.reset()
+      }else{
         const newPostObject: IPost = {
           userId: 0,
           id: 0,
@@ -46,12 +71,25 @@ export class ManagePostsComponent {
             this.updatedPosts.emit(this.dataService.postsArray);
           }
         )
-      }else{
-        this.dataService.postsArray[toEditPostId].userId = postForm.value.userId;
-        this.dataService.postsArray[toEditPostId].id = postForm.value.id;
-        this.dataService.postsArray[toEditPostId].title = postForm.value.title;
-        this.dataService.postsArray[toEditPostId].body = postForm.value.body;
       }
+      postForm.reset()
+    }else{
+      if(postForm.value.title == "" && postForm.value.body == ""){
+        this.errorMessages.titleError = "*Title can't be empty";
+        this.errorMessages.bodyError = "*Description can't be empty";
+      }else if(postForm.value.body == "" && postForm.value.title != ""){
+        this.errorMessages.bodyError = "*Description can't be empty";
+      }else if(postForm.value.title == "" && postForm.value.body != ""){
+        this.errorMessages.titleError = "*Title can't be empty";
+      }
+    }
+    if(postForm.value.title !== "" && postForm.value.body !== ""){
+      this.errorMessages.titleError = "";
+      this.errorMessages.bodyError = "";
+    }else if(postForm.value.title !== "" && postForm.value.body == ""){
+      this.errorMessages.titleError = "";
+    }else if(postForm.value.title == "" && postForm.value.body !== ""){
+      this.errorMessages.bodyError = "";
     }
   }
 }
